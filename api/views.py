@@ -8,7 +8,8 @@ from .services.country_data import country_data
 from .services.cat_api import cat_image
 from .services.advice_api import advice_api
 from .services.joke_api import joke_api
-from .serializers import CountryDetailSerializer, CountryQuerySerializer
+from.services.age_prediction_api import age_prediction_api
+from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer
 
 # Create your views here.
 @api_view(['GET'])
@@ -80,3 +81,20 @@ def get_random_advice(request):
     
     except requests.exceptions.RequestException:
         return Response({'error':'Failed to fetch advice'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    
+@api_view(['GET'])
+def get_age_prediction(request):
+    query = AgeQuerySerializer(data=request.query_params)
+    query.is_valid(raise_exception=True)
+    name = query.validated_data['name']
+
+    try:
+        age_prediction = age_prediction_api(name)
+        age_prediction_data = {
+            'name': age_prediction['name'],
+            'predicted_age': age_prediction.get('age')
+        }
+        return Response(data=age_prediction_data, status=status.HTTP_200_OK)
+    
+    except requests.exceptions.RequestException:
+        return Response({'error':'Fetching age data failed.'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)

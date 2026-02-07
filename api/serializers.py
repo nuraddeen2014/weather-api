@@ -9,3 +9,6 @@ class CountryDetailSerializer(serializers.Serializer):
 
 class CountryQuerySerializer(serializers.Serializer):
     name = serializers.CharField(required=True)
+
+class AgeQuerySerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)

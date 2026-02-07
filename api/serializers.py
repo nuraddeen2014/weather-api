@@ -12,3 +12,11 @@ class CountryQuerySerializer(serializers.Serializer):
 
 class AgeQuerySerializer(serializers.Serializer):
     name = serializers.CharField(required=True)
+
+class CountryUniversitiesQuerySerializer(serializers.Serializer):
+    country = serializers.CharField(min_length=1,required=True)
+
+class CountryUniversitiesSerializer(serializers.Serializer):
+    country = serializers.CharField()
+
+# class CountryUniversitySearchSerializer(serializers.Serializer):

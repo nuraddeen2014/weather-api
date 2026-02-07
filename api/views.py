@@ -9,7 +9,9 @@ from .services.cat_api import cat_image
 from .services.advice_api import advice_api
 from .services.joke_api import joke_api
 from.services.age_prediction_api import age_prediction_api
-from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer
+from.services.country_universities_api import country_universities_api
+from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer
+import json
 
 # Create your views here.
 @api_view(['GET'])
@@ -98,3 +100,31 @@ def get_age_prediction(request):
     
     except requests.exceptions.RequestException:
         return Response({'error':'Fetching age data failed.'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    
+@api_view(['GET'])
+def get_country_universities(request):
+    query = CountryUniversitiesQuerySerializer(data=request.query_params)
+    query.is_valid(raise_exception=True)
+    country = query.validated_data['country']
+
+    try:
+        country_universities = country_universities_api(country=country)
+
+        data_list = []
+        for i in  country_universities:
+            
+            data_dict = {
+                'name': i['name'],
+                'website': i['web_pages'][0]
+                }
+            
+            data_list.append(data_dict)
+        data = {
+                'country': country_universities[0]['country'],
+                'universities': data_list
+            }
+
+        
+        return Response(data=data, status=status.HTTP_200_OK)
+    except requests.exceptions.RequestException:
+        return Response({'error':'Failed to fetch data'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)

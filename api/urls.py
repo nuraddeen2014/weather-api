@@ -7,5 +7,6 @@ urlpatterns = [
     path('joke/', views.get_random_joke),
     path('advice/', views.get_random_advice),
     path('age/', views.get_age_prediction),
+    path('universities/', views.get_country_universities),
     path('country/', views.get_country_data)
 ]

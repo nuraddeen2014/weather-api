@@ -1,3 +1,14 @@
+"""
+API Views Module
+
+This module contains REST API endpoints that integrate with external APIs to provide
+data about animals (dogs, cats), entertainment (jokes, advice), geographical information
+(countries, universities), and demographic predictions (age estimation).
+
+Each view function is decorated with @api_view to handle HTTP requests and returns
+JSON responses with appropriate status codes and error handling.
+"""
+
 import requests
 from django.shortcuts import render
 from rest_framework.decorators import api_view

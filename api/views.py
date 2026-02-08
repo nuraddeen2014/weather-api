@@ -10,7 +10,7 @@ from .services.advice_api import advice_api
 from .services.joke_api import joke_api
 from.services.age_prediction_api import age_prediction_api
 from.services.country_universities_api import country_universities_api
-from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer
+from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer,CountryUniversitiesSerializer
 import json
 
 # Create your views here.
@@ -126,5 +126,27 @@ def get_country_universities(request):
 
         
         return Response(data=data, status=status.HTTP_200_OK)
+    except requests.exceptions.RequestException:
+        return Response({'error':'Failed to fetch data'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+@api_view(['GET'])
+def get_pro_country_universities(request):
+    query = CountryUniversitiesQuerySerializer(data=request.query_params)
+    query.is_valid(raise_exception=True)
+    country = query.validated_data['country']
+
+    try:
+        country_universities = country_universities_api(country=country)
+
+        data = {
+            'country': country,
+            'universities': country_universities
+        }
+
+        serializer = CountryUniversitiesSerializer(instance=data)
+        
+
+        
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
     except requests.exceptions.RequestException:
         return Response({'error':'Failed to fetch data'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)

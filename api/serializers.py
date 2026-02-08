@@ -16,7 +16,15 @@ class AgeQuerySerializer(serializers.Serializer):
 class CountryUniversitiesQuerySerializer(serializers.Serializer):
     country = serializers.CharField(min_length=1,required=True)
 
+class UniversitySerializer(serializers.Serializer):
+    name = serializers.CharField()
+    website = serializers.SerializerMethodField()
+
+    def get_website(self, obj):
+        return obj['web_pages'][0]
+
 class CountryUniversitiesSerializer(serializers.Serializer):
     country = serializers.CharField()
+    universities = UniversitySerializer(many=True)
 
 # class CountryUniversitySearchSerializer(serializers.Serializer):

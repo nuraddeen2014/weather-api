@@ -24,7 +24,16 @@ class UniversitySerializer(serializers.Serializer):
         return obj['web_pages'][0]
 
 class CountryUniversitiesSerializer(serializers.Serializer):
-    country = serializers.CharField()
+    country =serializers.CharField()
     universities = UniversitySerializer(many=True)
 
-# class CountryUniversitySearchSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+
+        country = instance[0].get('country')
+
+        universities = UniversitySerializer(instance, many=True).data
+        
+        return {
+            'country':country,
+            'universities':universities
+        }

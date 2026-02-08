@@ -138,14 +138,7 @@ def get_pro_country_universities(request):
     try:
         country_universities = country_universities_api(country=country)
 
-        data = {
-            'country': country,
-            'universities': country_universities
-        }
-
-        serializer = CountryUniversitiesSerializer(instance=data)
-        
-
+        serializer = CountryUniversitiesSerializer(instance=country_universities)
         
         return Response(data=serializer.data, status=status.HTTP_200_OK)
     except requests.exceptions.RequestException:

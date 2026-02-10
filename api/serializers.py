@@ -207,22 +207,3 @@ class BoredSerialier(serializers.Serializer):
     activity = serializers.CharField()
     type = serializers.CharField()
     participants = serializers.IntegerField()
-
-    def to_representation(self, instance):
-
-        if not instance:
-            return{
-                'activity': [],
-                'type': [],
-                'participants': []
-            }
-
-        activity = instance['activity']
-        type = instance['type']
-        participants = instance['participants']
-
-        return {
-            'activity': activity,
-            'type': type,
-            'participants': participants
-        }

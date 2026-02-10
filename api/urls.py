@@ -10,5 +10,6 @@ urlpatterns = [
     path('universities/', views.get_country_universities),
     path('universities/pro/', views.get_pro_country_universities),
     path('bored/', views.get_boredom_advice),
+    path('quotes/', views.QuotesAPIView.as_view()),
     path('country/', views.get_country_data)
 ]

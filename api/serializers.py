@@ -207,3 +207,17 @@ class BoredSerialier(serializers.Serializer):
     activity = serializers.CharField()
     type = serializers.CharField()
     participants = serializers.IntegerField()
+
+class QuotesSerializer(serializers.Serializer):
+    quote = serializers.CharField()
+    author = serializers.CharField()
+
+    def to_representation(self, instance):
+        
+        quote = instance['q']
+        author = instance['a']
+
+        return {
+            'quote':quote,
+            'author':author
+        }

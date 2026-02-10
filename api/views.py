@@ -13,7 +13,7 @@ import requests
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, views
 from .services.dog_api import dog_api
 from .services.country_data import country_data
 from .services.cat_api import cat_image
@@ -22,7 +22,8 @@ from .services.joke_api import joke_api
 from.services.age_prediction_api import age_prediction_api
 from.services.bored_api import bored_api
 from.services.country_universities_api import country_universities_api
-from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer,CountryUniversitiesSerializer, BoredQuerySerializer, BoredSerialier
+from.services.quotes_api import quotes_api
+from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer,CountryUniversitiesSerializer, BoredQuerySerializer, BoredSerialier,QuotesSerializer
 import json
 
 # Create your views here.
@@ -170,3 +171,16 @@ def get_boredom_advice(request):
     
     except requests.exceptions.RequestException:
         return Response({'error':'Failed to fetch advice'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    
+class QuotesAPIView(views.APIView):
+
+    def get(self, request):
+
+        try:
+            quotes = quotes_api()
+            serializer = QuotesSerializer(instance=quotes, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except requests.exceptions.RequestException:
+            return Response({'error':'Service failure'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)

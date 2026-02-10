@@ -9,5 +9,6 @@ urlpatterns = [
     path('age/', views.get_age_prediction),
     path('universities/', views.get_country_universities),
     path('universities/pro/', views.get_pro_country_universities),
+    path('bored/', views.get_boredom_advice),
     path('country/', views.get_country_data)
 ]

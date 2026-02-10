@@ -20,8 +20,9 @@ from .services.cat_api import cat_image
 from .services.advice_api import advice_api
 from .services.joke_api import joke_api
 from.services.age_prediction_api import age_prediction_api
+from.services.bored_api import bored_api
 from.services.country_universities_api import country_universities_api
-from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer,CountryUniversitiesSerializer
+from .serializers import CountryDetailSerializer, CountryQuerySerializer, AgeQuerySerializer, CountryUniversitiesQuerySerializer,CountryUniversitiesSerializer, BoredQuerySerializer, BoredSerialier
 import json
 
 # Create your views here.
@@ -154,3 +155,18 @@ def get_pro_country_universities(request):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
     except requests.exceptions.RequestException:
         return Response({'error':'Failed to fetch data'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    
+@api_view(['GET'])
+def get_boredom_advice(request):
+    query = BoredQuerySerializer(data=request.query_params)
+    query.is_valid(raise_exception=True)
+    boredom_advice_type = query.validated_data['type']
+
+    try:
+        boredom_advice = bored_api(activity_type=boredom_advice_type)
+        serializer = BoredSerialier(instance=boredom_advice, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+    except requests.exceptions.RequestException:
+        return Response({'error':'Failed to fetch advice'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
